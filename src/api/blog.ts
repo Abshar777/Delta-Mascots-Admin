@@ -30,7 +30,7 @@ export const createBlog = async (token: string, data: any) => {
 
 
 export const updateBlog = async (token: string, id: string, data: any) => {
-    const response = await AxiosInstance(token).put(`${BLOG_URL}/${id}`, data)
+    const response = await AxiosInstance(token).put(`${BLOG_URL}/`, data)
     return response.data
 }
 
