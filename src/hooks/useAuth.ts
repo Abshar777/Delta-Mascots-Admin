@@ -36,8 +36,6 @@ export const useAuth = (type: "login" | "signup" = "login") => {
     console.log(response, "response")
     signIn("credentials", {
       email: response.user.email,
-      name: response.user.name,
-      id: response.user.id,
       token: response.token,
       redirect: false,
     }).then(() => {

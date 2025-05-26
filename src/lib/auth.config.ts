@@ -8,27 +8,24 @@ export const authConfig: AuthOptions = {
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email", placeholder: "your@email.com" },
-        name: { label: "Password", type: "password" },
-        id: { label: "Id", type: "id" },
-        role: { label: "Role", type: "role" },
         token: { label: "Token", type: "token" },
-        verified: { label: "Verified", type: "boolean" },
+        name: { label: "Name", type: "text" },
+        id: { label: "Id", type: "text" },
       },
       async authorize(credentials) {
         console.log("authorize", credentials)
-        if (!credentials?.email || !credentials?.name || !credentials.id) {
-          console.log("Email and name and id are required.");
+        if (!credentials?.email || !credentials?.token) {
+          console.log("Email and name are required.");
           return null;
         }
 
         // Mock user for now, replace with actual DB call
         const user = {
           token: credentials?.token as string,
-          id: credentials?.id,
-          name: credentials.name,
+          name: "admin",
           email: credentials.email as string,
-          role: credentials.role as string,
-          verified: credentials.verified as any
+          id: "123",
+        
         };
 
         if (user) {
@@ -81,8 +78,6 @@ export const authConfig: AuthOptions = {
         token.token = user.token;
         token.name = user.name;
         token.email = user.email;
-        token.role = user.role;
-        token.verified = user.verified;
       }
       return token;
     },
@@ -92,11 +87,8 @@ export const authConfig: AuthOptions = {
     },
     session({ session, token }) {
       session.user.token = token.token as string;
-      session.user.id = token.id as string;
       session.user.name = token.name as string;
       session.user.email = token.email as string;
-      session.user.role = token.role as string;
-      session.user.verified = token.verified as string;
 
       return session;
     },
@@ -108,11 +100,8 @@ declare module "next-auth" {
   interface Session {
     user: {
       token: string;
-      id: string;
       name: string;
       email: string;
-      role: string;
-      verified: string;
     };
   }
 }
@@ -120,21 +109,16 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     token: string;
-    id: string;
     name: string;
     email: string;
-    role: string;
-    verified: string;
   }
 }
 
 declare module "next-auth" {
   interface User {
     token: string;
-    id: string;
     name: string;
     email: string;
-    role: string;
-    verified: string;
+   
   }
 }
