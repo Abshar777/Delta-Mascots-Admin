@@ -36,14 +36,10 @@ export const useAuth = (type: "login" | "signup" = "login") => {
     console.log(response, "response")
     signIn("credentials", {
       email: response.user.email,
-      password: response.user.password,
       name: response.user.name,
-      id: response.user._id,
-      role: response.user.role,
+      id: response.user.id,
       token: response.token,
       redirect: false,
-      verified: response.user.verified
-
     }).then(() => {
       setIsLoading(false)
       localStorage.setItem("loginId", getValues("email"))

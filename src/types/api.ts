@@ -1,10 +1,9 @@
 import { IOrder } from "./IOrder";
 
 export interface IUser {
-    _id: string;
+    id: string;
     name: string;
     email: string;
-    role: Roles;
     password: string;
     avatar: string;
     verified: boolean;
