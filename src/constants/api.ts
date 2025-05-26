@@ -1,5 +1,2 @@
-export const AUTH_URL = "/api/auth";
+export const AUTH_URL = "/auth";
 export const BLOG_URL = "/admin/blog";
-
-
-
