@@ -19,7 +19,7 @@ export enum Roles {
 export interface IApiResponse {
     success: boolean;
     message: string;
-    user: IUser;
+    email: string;
     token: string;
 }
 

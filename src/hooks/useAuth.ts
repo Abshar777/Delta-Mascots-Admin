@@ -35,7 +35,7 @@ export const useAuth = (type: "login" | "signup" = "login") => {
   function onSubmit(response: IApiResponse) {
     console.log(response, "response")
     signIn("credentials", {
-      email: response.user.email,
+      email: response.email,
       token: response.token,
       redirect: false,
     }).then(() => {

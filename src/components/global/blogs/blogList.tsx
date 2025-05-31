@@ -67,11 +67,11 @@ export default function BlogList() {
         <p className="text-muted-foreground mb-6">
           Create your first blog post to get started!
         </p>
-        <Link href="/blog/create">
+        <Link href="/admin/blog/create">
           <AnimatedButton
             isLoading={false}
             text="Create New Blog"
-            link="/blog/create"
+            link="/admin/blogs/create"
           />
         </Link>
       </div>
@@ -90,7 +90,7 @@ export default function BlogList() {
           <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow">
             <div className="relative h-40 w-full">
               <Image
-                src={post.coverImage || "/placeholder.svg?height=200&width=400"}
+                src={post.image || "/placeholder.webp"}
                 alt={post.title}
                 fill
                 className="object-cover"
@@ -102,7 +102,7 @@ export default function BlogList() {
             <CardContent className="flex-grow"></CardContent>
             <CardFooter className="flex justify-between">
               <span className="text-sm text-muted-foreground">
-                {formatDistanceToNow(new Date(post.createdAt), {
+                {formatDistanceToNow(new Date(post.created_at), {
                   addSuffix: true,
                 })}
               </span>

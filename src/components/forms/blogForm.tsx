@@ -11,7 +11,7 @@ import { useCreateBlog, useUpdateBlog } from "@/hooks/useBlog";
 
 const BlogForm = ({ id }: { id?: string }) => {
   const hook = id ? useUpdateBlog(id) : useCreateBlog();
-  const { form, errors, onFormSubmit, coverImage, content, isPending, setContent } = hook;
+  const { form, errors, onFormSubmit, content, isPending, setContent } = hook;
   return (
     <form onSubmit={onFormSubmit} className="space-y-8 w-full overflow-hidden">
       {/* Title */}
@@ -29,26 +29,29 @@ const BlogForm = ({ id }: { id?: string }) => {
       </div>
 
       {/* Cover Image */}
-      {/* <div className="space-y-2">
+      <div className="space-y-2">
         <Label>Cover Image</Label>
         <ImageUploader
-          onImageSelected={(url) => form.setValue("coverImage", url)}
+          onImageSelected={(url) => {
+            console.log("url", url);
+            form.setValue("image", url as string);
+          }}
         />
-        {coverImage && (
+        {/* {image && (
           <div className="mt-2 relative w-full h-48 rounded-md overflow-hidden">
             <img
-              src={coverImage}
+              src={image}
               alt="Cover preview"
               className="w-full h-full object-cover"
             />
           </div>
-        )}
-      </div> */}
+        )} */}
+      </div>
 
       {/* Content */}
       <div className="space-y-2 w-full  overflow-hidden">
         <Label>Content</Label>
-        <Editor   onChange={(editorState: any) => setContent(editorState)} />
+        <Editor onChange={(editorState: any) => setContent(editorState)} />
         {errors.content && (
           <p className="text-sm text-red-500">{errors.content.message}</p>
         )}
@@ -59,7 +62,7 @@ const BlogForm = ({ id }: { id?: string }) => {
         <Button
           type="submit"
           className="flex items-center gap-2"
-          disabled={isPending }
+          disabled={isPending}
         >
           {isPending ? (
             <Loader2 className="animate-spin" size={16} />

@@ -28,14 +28,13 @@ export default function BlogPostPage() {
         setPost(blogPost);
       } catch (error) {
         console.error("Failed to load blog post:", error);
-        router.push("/");
       } finally {
         setIsLoading(false);
       }
     };
 
     loadPost();
-  }, [params.id, router]);
+  }, [params.id]);
 
   if (isLoading) {
     return (
@@ -96,7 +95,7 @@ export default function BlogPostPage() {
                 <div className="flex items-center gap-1">
                   <Calendar size={16} />
                   <span>
-                    {format(new Date(post.createdAt), "MMMM d, yyyy")}
+                    {format(new Date(post.created_at), "MMMM d, yyyy")}
                   </span>
                 </div>
 
@@ -112,7 +111,7 @@ export default function BlogPostPage() {
               </div>
             </motion.div>
 
-            {/* {post.coverImage && (
+            {post.image && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -120,13 +119,13 @@ export default function BlogPostPage() {
                 className="relative w-full h-[400px] mb-8 rounded-lg overflow-hidden"
               >
                 <Image
-                  src={post.coverImage || "/placeholder.svg"}
+                  src={post.image || "/placeholder.svg"}
                   alt={post.title}
                   fill
                   className="object-cover"
                 />
               </motion.div>
-            )} */}
+            )}
 
             <motion.div
               initial={{ opacity: 0 }}

@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
 interface ImageUploaderProps {
-  onImageSelected: (imageUrl: string | null) => void
+  onImageSelected: (base64: string | ArrayBuffer | null) => void
   initialImage?: string | null
 }
 
@@ -56,9 +56,10 @@ export default function ImageUploader({ onImageSelected, initialImage = null }: 
     const reader = new FileReader()
     reader.onload = (e) => {
       if (e.target?.result) {
+        console.log("e.target?.result", e.target?.result);
         const imageUrl = e.target.result.toString()
         setPreviewUrl(imageUrl)
-        onImageSelected(imageUrl)
+        onImageSelected(e.target?.result)
         setIsUploading(false)
       }
     }
@@ -71,11 +72,7 @@ export default function ImageUploader({ onImageSelected, initialImage = null }: 
   }
 
 
-  useEffect(() => {
-    if (file) {
-      onImageSelected(file as any)
-    }
-  }, [file, onImageSelected])
+ 
 
   return (
     <div className="w-full">
@@ -103,8 +100,8 @@ export default function ImageUploader({ onImageSelected, initialImage = null }: 
         </div>
       ) : (
         <div className="relative">
-          <div className="relative w-full h-48 rounded-md overflow-hidden">
-            <img src={previewUrl || "/placeholder.svg"} alt="Cover preview" className="w-full h-full object-cover" />
+          <div className="relative w-full flex items-center justify-center h-48 rounded-md overflow-hidden">
+            <img src={previewUrl || "/placeholder.svg"} alt="Cover preview" className="h-full rounded-md object-cover" />
           </div>
           <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-8 w-8" onClick={clearImage}>
             <X className="h-4 w-4" />

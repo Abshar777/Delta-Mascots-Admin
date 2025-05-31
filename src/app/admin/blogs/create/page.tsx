@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import PageContainer from "@/components/layout/page-container";
 import { Card, CardContent } from "@/components/ui/card";
-import BlogForm from "@/components/forms/blog";
+import BlogForm from "@/components/forms/blogForm";
 
 export default function EditorPage() {
   const router = useRouter();

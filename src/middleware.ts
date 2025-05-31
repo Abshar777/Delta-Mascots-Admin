@@ -1,68 +1,37 @@
+// middleware.ts
 import { NextRequest, NextResponse } from "next/server"
-import { withAuth } from "next-auth/middleware";
-import { Roles } from "./types/api";
 
-export default withAuth(
-  async function middleware(req) {
-    const path = req.nextUrl.pathname
-    const token = req.nextauth.token;
-    const isLoggedIn = !!token;
-    const userRole = token?.role;
-    const isVerified = token?.verified;
-    const isSuperAdminPage = path.startsWith("/admin/superAdmin");
-    const isAdmin = token?.role === Roles.ADMIN;
-    const isDeliveryBoy = token?.role === Roles.DELIVERY_BOY;
+// Create a middleware function without withAuth first
+export function middleware(req:NextRequest) {
+  const path = req.nextUrl.pathname
+  
+  // Get auth status from cookie to avoid redirect loops
+  const isAuthenticated = !!req.cookies.get('next-auth.session-token')
 
-    console.log(path, "path 🟢")
-    
-    if (path == "/auth/signout") {
-      if (!isLoggedIn) {
-        return NextResponse.redirect(new URL("/auth/login", req.url));
-      }
-      return NextResponse.next()
+  // Always allow access to auth routes
+  if (path.startsWith("/auth")) {
+    if (isAuthenticated) {
+      // If user is already logged in, redirect them away from auth pages
+      return NextResponse.redirect(new URL("/admin/dashboard", req.url))
     }
-
-    if (path.startsWith("/auth") && path !== "/auth/signout") {
-      if (isLoggedIn && isVerified == "true") {
-        return NextResponse.redirect(new URL("/admin/dashboard", req.url));
-      }
-      return NextResponse.next()
-    }
-
-    if (path.startsWith("/admin")) {
-      if (!isLoggedIn) {
-        return NextResponse.redirect(new URL("/auth/login", req.url))
-      }
-      console.log(token, "token")
-      if (isLoggedIn && isVerified == "false") {
-        return NextResponse.redirect(new URL("/auth/signout", req.url));
-      }
-      console.log(userRole, "userRole")
-      if(isSuperAdminPage && !isAdmin){
-        return NextResponse.redirect(new URL("/admin/dashboard", req.url))
-      }
-    }
-
-    return NextResponse.next();
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => {
-     
-        return true;
-      },
-    },
-
-    cookies: {
-      sessionToken: {
-        name: `admin-session-token`
-      }
-    }
+    return NextResponse.next()
   }
-);
 
+  // Protect admin routes
+  if (path.startsWith("/admin")) {
+    if (!isAuthenticated) {
+      return NextResponse.redirect(new URL("/auth/login", req.url))
+    }
+    return NextResponse.next()
+  }
+
+  return NextResponse.next()
+}
+
+// Configure matcher to specify which routes to handle
 export const config = {
   matcher: [
+    // Match auth and admin routes, exclude api and static files
     "/auth/:path*",
     "/admin/:path*",
     "/((?!api|_next/static|_next/image|favicon.ico).*)"

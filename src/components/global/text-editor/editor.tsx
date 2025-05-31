@@ -32,7 +32,7 @@ export function Editor({
   onSerializedChange?: (editorSerializedState: SerializedEditorState) => void;
 }) {
   return (
-    <div className="overflow-hidden max-h-svh relative rounded-lg border p-2 bg-muted-foreground/5 shadow">
+    <div className="overflow-hidden max-h-svh min-w-[90vw] relative rounded-lg border p-2 bg-muted-foreground/5 shadow">
       <TooltipProvider>
         <SharedAutocompleteContext>
           <FloatingLinkContext>

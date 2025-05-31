@@ -63,21 +63,22 @@ export const useCreateBlog = () => {
       })
     })
   }, [editor])
-  const coverImage = watch("coverImage");
+  // const image = watch("image");
 
 
-  return { mutate, isPending, coverImage, content, form, formState, errors, onFormSubmit, watch, setContent };
+  return { mutate, isPending,  content, form, formState, errors, onFormSubmit, watch, setContent };
 };
 
 
 export const useUpdateBlog = (id: string) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const [content, setContent] = useState<any>(null);
   const { data, isPending: isLoading,isFetched } = useQueryData(["blogById"], () =>
     getBlogById(session?.user.token, id)
   );
   const [editor] = useLexicalComposerContext()
-  const { mutate, isPending } = useMutationData(["updateBlog"], (data: any) =>
+  const { mutate, isPending,isSuccess } = useMutationData(["updateBlog"], (data: any) =>
     updateBlog(session?.user.token, id, data)
   );
 
@@ -108,7 +109,12 @@ export const useUpdateBlog = (id: string) => {
     }
   }, [isFetched])
 
-
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Blog updated successfully")
+      router.push("/admin/blogs")
+    }
+  }, [isSuccess])
 
 
 
@@ -130,10 +136,10 @@ export const useUpdateBlog = (id: string) => {
       })
     })
   }, [editor])
-  const coverImage = watch("coverImage");
+  // const image = watch("image");
 
 
-  return { mutate, isPending, coverImage, content, form, formState, errors, onFormSubmit, watch, setContent };
+  return { mutate, isPending,  content, form, formState, errors, onFormSubmit, watch, setContent };
 }
 
 
